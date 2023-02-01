@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.torange.api.createPool.dao.CreatePoolDAO">
+
+    <select id="selectUserDatabaseInfo" parameterType="java.lang.String" resultType="userDbInfo">
+        SELECT  user_id,
+                db_driver_name,
+                db_url,
+                db_type,
+                db_user,
+                db_pw,
+                use_flg,
+                sort_no
+        FROM public.user_db_info
+        where user_id = #{value}
+        ORDER BY sort_no
+    </select>
+</mapper>
