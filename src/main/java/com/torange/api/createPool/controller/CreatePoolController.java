@@ -1,9 +1,9 @@
 package com.torange.api.createPool.controller;
 
+import com.torange.api.common.constant.Const;
 import com.torange.api.common.database.MultiDbConnectionPool;
-import com.torange.api.common.util.Const;
-import com.torange.api.common.util.DatasourceInfoVO;
-import com.torange.api.common.util.ExcuteQueryVO;
+import com.torange.api.common.validation.ConnectionAuthValidation;
+import com.torange.api.common.vo.ExcuteQueryVO;
 import com.torange.api.createPool.dao.vo.UserDbInfoVO;
 import com.torange.api.createPool.service.CreatePoolService;
 import org.slf4j.Logger;
@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.util.HashMap;
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "/warevalley/torange/api", produces = "application/json; charset=utf-8")
@@ -27,60 +26,53 @@ public class CreatePoolController {
 
     private static final Logger log = LoggerFactory.getLogger(CreatePoolController.class);
 
-
-    @PostMapping(value = "/selectUserDatabaseInfo")
-    @ResponseStatus(HttpStatus.OK)
-    @ResponseBody
-    public HashMap<String, Object> selectUserDatabaseInfo(HttpServletRequest request, @RequestBody String userId) throws Exception {
-        HashMap<String, Object> resultMap = new HashMap<>();
-        HttpSession session = request.getSession();
-
-        List<UserDbInfoVO> result = createPoolService.selectUserDatabaseInfo(userId);
-
-        resultMap.put(session.getId() + Const.SUFFIX_AT + userId, result);
-
-        return resultMap;
-    }
-
     @PostMapping(value = "/createUserConnectionPool")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public HashMap<String, Object> createUserConnectionPool(HttpServletRequest request
-            , @RequestBody DatasourceInfoVO dsInfo) throws Exception {
+    public HashMap<String, Object> createUserConnectionPool(HttpServletRequest request, @RequestBody UserDbInfoVO dsInfo) throws Exception {
 
         HashMap<String, Object> resultMap = new HashMap<>();
         HttpSession session = request.getSession();
-        String dbPoolName = session.getId() + Const.SUFFIX_AT + dsInfo.getUserId() + Const.SUFFIX_AT + dsInfo.getDbType();
+
+        boolean authFlg = ConnectionAuthValidation.validateConnectionAuth(session, dsInfo);
+        if (!authFlg) {
+            resultMap.put("resultCode", HttpStatus.FORBIDDEN);
+            resultMap.put("resultMessage", "Please check Authorization");
+            return resultMap;
+        }
+
+        String dbPoolName = session.getId() + Const.SEPARATOR_AT + dsInfo.getUserId() + Const.SEPARATOR_AT + dsInfo.getDbType();
 
         dsInfo.setDbPoolName(dbPoolName);
-        Connection conn = MultiDbConnectionPool.getConnection(dsInfo);
+        MultiDbConnectionPool.createConnectionPool(dsInfo);
 
-        resultMap.put("dbPoolName", dsInfo.getDbPoolName());
+        resultMap.put("resultCode", HttpStatus.OK);
+        resultMap.put("resultMessage", "Created Connection pool");
+        resultMap.put(Const.POOL_NAME, dsInfo.getDbPoolName());
         return resultMap;
     }
 
 
-    @PostMapping(value = "/selectConnectionTest")
+    @PostMapping(value = "/excuteQueryTest")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public HashMap<String, Object> selectConnectionTest(HttpServletRequest request, @RequestBody ExcuteQueryVO paramVO){
+    public HashMap<String, Object> excuteQueryTest(HttpServletRequest request, @RequestBody ExcuteQueryVO paramVO) {
+        HashMap<String, Object> resultMap = new HashMap<>();
+        HashMap<String, Object> result = null;
+
         HttpSession session = request.getSession();
 
-        DatasourceInfoVO dsInfo = new DatasourceInfoVO();
-        HashMap<String, Object> resultMap = new HashMap<>();
-        List<HashMap<String, Object>> result = null;
-
         try {
-            dsInfo.setDbPoolName(session.getId() + Const.SUFFIX_AT + paramVO.getDbPoolName());
+            String poolName = session.getId() + Const.SEPARATOR_AT + paramVO.getDbPoolName();
 
-            if(!MultiDbConnectionPool.isAliveConnectionPool(dsInfo)){
+            if (!MultiDbConnectionPool.isAliveConnectionPool(poolName)) {
                 String errMessage = new Exception("Connection has been closed!\nPlease create connections").getMessage();
                 resultMap.put("result", errMessage);
                 return resultMap;
             }
-            Connection connection = MultiDbConnectionPool.getConnection(dsInfo);
+            Connection conn = MultiDbConnectionPool.getConnection(poolName);
 
-            result = createPoolService.selectConnectionTest(connection, paramVO.getSql());
+            result = createPoolService.excuteQueryTest(conn, paramVO.getSql());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -92,13 +84,12 @@ public class CreatePoolController {
     @PostMapping(value = "/poolShutdown")
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public void poolShutdown(HttpServletRequest request, @RequestBody ExcuteQueryVO paramVO){
+    public void poolShutdown(HttpServletRequest request, @RequestBody ExcuteQueryVO paramVO) {
         HttpSession session = request.getSession();
-        DatasourceInfoVO dsInfo = new DatasourceInfoVO();
 
         try {
-            dsInfo.setDbPoolName(session.getId() + Const.SUFFIX_AT + paramVO.getDbPoolName());
-            MultiDbConnectionPool.poolShutdown(dsInfo);
+            String poolName = session.getId() + Const.SEPARATOR_AT + paramVO.getDbPoolName();
+            MultiDbConnectionPool.poolShutdown(poolName);
         } catch (Exception e) {
             e.printStackTrace();
         }

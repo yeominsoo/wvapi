@@ -1,7 +1,9 @@
 package com.torange.api.common.database;
 
-import com.torange.api.common.util.Const;
-import com.torange.api.common.util.DatasourceInfoVO;
+import com.torange.api.common.constant.Const;
+import com.torange.api.common.util.DatabaseUtil;
+import com.torange.api.common.validation.ConnectionAuthValidation;
+import com.torange.api.createPool.dao.vo.UserDbInfoVO;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
@@ -21,41 +23,40 @@ public class MultiDbConnectionPool {
     private final static Map<String, DataSource> DB_POOLMAP = new ConcurrentHashMap<>();
 
 
-    public static synchronized Connection getConnection(DatasourceInfoVO dsInfo) throws Exception {
-        if (!DB_POOLMAP.containsKey(dsInfo.getDbPoolName())) {
-            createDataSource(dsInfo);
-        }
-        DataSource datasource = DB_POOLMAP.get(dsInfo.getDbPoolName());
+    public static synchronized Connection getConnection(String poolName) throws Exception {
+        DataSource datasource = DB_POOLMAP.get(poolName);
         return datasource.getConnection();
     }
 
-    public static void poolShutdown(DatasourceInfoVO dsInfo){
-        HikariDataSource datasource = (HikariDataSource) DB_POOLMAP.get(dsInfo.getDbPoolName());
-        if(datasource != null){
+    public static synchronized void createConnectionPool(UserDbInfoVO dsInfo) throws Exception {
+        if (!DB_POOLMAP.containsKey(dsInfo.getDbPoolName())) createDataSource(dsInfo);
+    }
+
+    public static void poolShutdown(String poolName) {
+        HikariDataSource datasource = (HikariDataSource) DB_POOLMAP.get(poolName);
+        if (datasource != null) {
             datasource.close();
-            DB_POOLMAP.remove(dsInfo.getDbPoolName());
+            DB_POOLMAP.remove(poolName);
         }
     }
 
-    private static void createDataSource(DatasourceInfoVO dsInfo) throws Exception {
-        if (DB_POOLMAP.containsKey(dsInfo.getDbPoolName())) {
-            throw new Exception("Connection pool session is alive !");
-        }
+    private static void createDataSource(UserDbInfoVO dsInfo) throws Exception {
+        // 파라미터 검사.
+        if (ConnectionAuthValidation.isVariableNull(dsInfo)) throw new Exception(ConnectionAuthValidation.getMessage(dsInfo));
+
+        //url setting
+        DatabaseUtil.makeDatabaseUrl(dsInfo);
+        // jdbc driver load
+        DatabaseUtil.invokeJdbcDriver(dsInfo);
+        // configuration connection
         HikariConfig hikariConfig = getHikariConfig(dsInfo);
+        // create hikaricp
         HikariDataSource hikariDataSource = new HikariDataSource(hikariConfig);
 
-        log.info("current pool name : {} " , hikariDataSource.getPoolName());
         DB_POOLMAP.put(dsInfo.getDbPoolName(), hikariDataSource);
     }
 
-    private static HikariConfig getHikariConfig(DatasourceInfoVO dsInfo) throws Exception {
-
-        if (dsInfo.getDbUrl().isEmpty()) throw new Exception("This argument is not null [URL]");
-        if (dsInfo.getDbUser().isEmpty()) throw new Exception("This argument is not null [Username]");
-        if (dsInfo.getDbPw().isEmpty()) throw new Exception("This argument is not null [Password]");
-        if (dsInfo.getDbDriverName().isEmpty()) throw new Exception("This argument is not null [Driver Class Name]");
-        if (dsInfo.getDbPoolName().isEmpty()) throw new Exception("This argument is not null [Pool name]");
-
+    private static HikariConfig getHikariConfig(UserDbInfoVO dsInfo) {
         HikariConfig hikaConfig = new HikariConfig();
 
         try {
@@ -67,7 +68,7 @@ public class MultiDbConnectionPool {
             // password
             hikaConfig.setPassword(dsInfo.getDbPw());
             // driver class name
-            hikaConfig.setDriverClassName(dsInfo.getDbDriverName());
+            hikaConfig.setDriverClassName(dsInfo.getDbDriverClNm());
 
             // Information about the pool
             // pool name. This is optional you don't have to do it.
@@ -85,15 +86,16 @@ public class MultiDbConnectionPool {
             // If you don't want to retire the connections simply put 0.
             hikaConfig.setIdleTimeout(Duration.ofMinutes(Const.INT_IDLE_TIMEOUT).toMillis());
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return hikaConfig;
     }
 
-    public static Boolean isAliveConnectionPool(DatasourceInfoVO dsInfo)
-    {
-        return DB_POOLMAP.containsKey(dsInfo.getDbPoolName());
+    public static Boolean isAliveConnectionPool(String dbPoolName) {
+        return DB_POOLMAP.containsKey(dbPoolName);
     }
+
+
 }
