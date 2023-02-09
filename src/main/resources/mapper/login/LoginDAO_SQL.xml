@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.torange.api.login.dao.LoginDAO">
+
+ <!--   <select id="selectAccessUserInfo" parameterType="loginUserInfoVO" resultType="loginUserInfoVO">
+        SELECT 	A.USER_ID, A.USER_NM, A.USER_IP_ADDR,
+                A.PW_FAIL_CNT, A.USE_FLG, A.LOCK_FLG
+        FROM USER_INFO UI
+        WHERE UI.USER_ID = #{userId}
+          AND UI.USER_PW = crypt(#{userPw}, UI.USER_PW)
+    </select>-->
+    <select id="selectAccessUserInfo" parameterType="loginUserInfoVO" resultType="userDbInfoVO">
+        <![CDATA[
+            SELECT A.USER_ID, A.USER_NM, A.USER_IP_ADDR,
+                   A.PW_FAIL_CNT, A.LOCK_FLG,
+                   B.DB_TYPE, B.DB_HOST, B.DB_PORT,
+                   B.DB_SERVICE_NAME, B.DB_SID, B.DB_NAME, B.DB_LISTEN_TYPE,
+                   B.DB_USER, B.DB_PW,
+                   C.SEQ, C.DB_DRIVER_CL_NM, CONCAT(C.DB_JDBC_PATH, C.DB_JDBC_FILE) as JDBC_PATH
+            FROM USER_INFO A
+                LEFT OUTER JOIN USER_DB_INFO B
+                     ON A.USER_ID = B.USER_ID
+                    AND B.USE_FLG = 'Y'
+                LEFT OUTER JOIN DB_CONFIG C
+                     ON B.DB_TYPE = C.DB_TYPE
+                    AND B.USE_FLG = 'Y'
+            WHERE A.USER_ID = #{userId}
+              AND A.USER_PW = crypt(#{userPw}, A.USER_PW)
+            ORDER BY A.USER_ID, B.SORT_NO
+        ]]>
+    </select>
+</mapper>

@@ -1,17 +1,14 @@
 package com.torange.api.createPool.service.impl;
 
 import com.torange.api.createPool.dao.CreatePoolDAO;
-import com.torange.api.createPool.dao.vo.UserDbInfoVO;
 import com.torange.api.createPool.service.CreatePoolService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,50 +20,54 @@ public class CreatePoolServiceImpl implements CreatePoolService {
     @Autowired
     private CreatePoolDAO createPoolDAO;
 
-    private static final Logger log = LoggerFactory.getLogger(CreatePoolServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(CreatePoolServiceImpl.class);
 
     @Override
-    public List<UserDbInfoVO> selectUserDatabaseInfo(String userId) throws Exception {
-        return createPoolDAO.selectUserDatabaseInfo(userId);
-    }
+    public HashMap<String, Object> excuteQueryTest(Connection conn, String sql) throws Exception {
 
-
-    @Override
-    public List<HashMap<String, Object>> selectConnectionTest(Connection conn, String sql) throws Exception {
-
-        Statement stmt = null;
+        PreparedStatement stmt = null;
         ResultSet resultSet = null;
 
-        List<HashMap<String, Object>> resultList = new ArrayList<>();
+        List<HashMap<String, Object>> list = new ArrayList<>();
+        HashMap<String, Object> resultMap = new HashMap<>();
 
         try {
-            stmt = conn.createStatement();
-            resultSet = stmt.executeQuery(sql);
+            stmt = conn.prepareStatement(sql);
+            if(stmt.execute()){
+                resultSet = stmt.getResultSet();
+            } else {
+                resultMap.put("resultData", stmt.getUpdateCount());
+            }
 
             if (resultSet != null) {
-                HashMap<String, Object> resultMap = new HashMap<>();
+                HashMap<String, Object> dataMap;
                 ResultSetMetaData rsmd = resultSet.getMetaData();
 
                 int index = 1;
                 // row data
                 while (resultSet.next()) {
-                    resultMap.clear();
+                    dataMap = new HashMap<>();
                      //col data
                     for(int i = 1; i <= rsmd.getColumnCount(); i++){
-                        resultMap.put(rsmd.getColumnName(i), resultSet.getObject(rsmd.getColumnName(i)));
+                        dataMap.put(rsmd.getColumnName(i), resultSet.getObject(rsmd.getColumnName(i)));
                     }
-                    resultList.add(resultMap);
+                    list.add(dataMap);
                     index++;
                 }
+                resultMap.put("resultData", list);
             }
-        } catch (Exception e) {
+            resultMap.put("resultCode", HttpStatus.OK.value());
+            resultMap.put("resultMessage", HttpStatus.OK);
+        } catch (SQLException e) {
             e.printStackTrace();
+            resultMap.put("resultCode", e.getErrorCode());
+            resultMap.put("resultMessage", e.getMessage());
         } finally {
             if (resultSet != null) resultSet.close();
             if (stmt != null) stmt.close();
             if (conn != null) conn.close();
         }
 
-        return resultList;
+        return resultMap;
     }
 }
