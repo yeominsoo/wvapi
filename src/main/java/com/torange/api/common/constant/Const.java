@@ -17,6 +17,6 @@ public class Const {
 
     public static final int INT_CONNECTION_POOL_SIZE = 5;
     public static final int INT_CONNECTION_TIMEOUT = 5;
-    public static final int INT_IDLE_TIMEOUT = 2;
+    public static final int INT_IDLE_TIMEOUT = 6;
 
 }
