@@ -3,7 +3,7 @@ package com.torange.api.common.database;
 import com.torange.api.common.constant.Const;
 import com.torange.api.common.util.DatabaseUtil;
 import com.torange.api.common.validation.ConnectionAuthValidation;
-import com.torange.api.createPool.dao.vo.UserDbInfoVO;
+import com.torange.api.dbmanager.dao.vo.DbManagerVO;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class MultiDbConnectionPool {
         return datasource.getConnection();
     }
 
-    public static synchronized void createConnectionPool(UserDbInfoVO dsInfo) throws Exception {
+    public static synchronized void createConnectionPool(DbManagerVO dsInfo) throws Exception {
         if (!DB_POOLMAP.containsKey(dsInfo.getDbPoolName())) createDataSource(dsInfo);
     }
 
@@ -40,7 +40,7 @@ public class MultiDbConnectionPool {
         }
     }
 
-    private static void createDataSource(UserDbInfoVO dsInfo) throws Exception {
+    private static void createDataSource(DbManagerVO dsInfo) throws Exception {
         // 파라미터 검사.
         if (ConnectionAuthValidation.isVariableNull(dsInfo)) throw new Exception(ConnectionAuthValidation.getMessage(dsInfo));
 
@@ -56,7 +56,7 @@ public class MultiDbConnectionPool {
         DB_POOLMAP.put(dsInfo.getDbPoolName(), hikariDataSource);
     }
 
-    private static HikariConfig getHikariConfig(UserDbInfoVO dsInfo) {
+    private static HikariConfig getHikariConfig(DbManagerVO dsInfo) {
         HikariConfig hikaConfig = new HikariConfig();
 
         try {

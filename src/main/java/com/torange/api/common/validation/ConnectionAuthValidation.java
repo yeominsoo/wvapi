@@ -1,7 +1,7 @@
 package com.torange.api.common.validation;
 
 import com.torange.api.common.constant.Const;
-import com.torange.api.createPool.dao.vo.UserDbInfoVO;
+import com.torange.api.dbmanager.dao.vo.DbManagerVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -18,9 +18,9 @@ public class ConnectionAuthValidation {
         super();
     }
 
-    public static boolean validateConnectionAuth(HttpSession session, UserDbInfoVO dbInfo) {
+    public static boolean validateConnectionAuth(HttpSession session, DbManagerVO dbInfo) {
         try {
-            List<UserDbInfoVO> dbInfoSession = (List<UserDbInfoVO>) session.getAttribute(Const.USER_INFO);
+            List<DbManagerVO> dbInfoSession = (List<DbManagerVO>) session.getAttribute(Const.USER_INFO);
 
             if (dbInfoSession != null) {
                 // host:port 접근이 가능한지 여부만 체크.
@@ -40,7 +40,7 @@ public class ConnectionAuthValidation {
         return false;
     }
 
-    public static String getMessage(UserDbInfoVO dsInfo) {
+    public static String getMessage(DbManagerVO dsInfo) {
 
         if (dsInfo.getDbHost().isEmpty()) return new Exception("Argument is null [HOST]").getMessage();
         if (dsInfo.getDbPort().isEmpty()) return new Exception("Argument is null [PORT]").getMessage();
@@ -53,7 +53,7 @@ public class ConnectionAuthValidation {
         return "";
     }
 
-    public static boolean isVariableNull(UserDbInfoVO dsInfo) {
+    public static boolean isVariableNull(DbManagerVO dsInfo) {
         boolean bNull = false;
 
         if (dsInfo.getDbHost().isEmpty()) bNull = true;

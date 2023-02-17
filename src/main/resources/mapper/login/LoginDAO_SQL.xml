@@ -10,7 +10,7 @@
         WHERE UI.USER_ID = #{userId}
           AND UI.USER_PW = crypt(#{userPw}, UI.USER_PW)
     </select>-->
-    <select id="selectAccessUserInfo" parameterType="loginUserInfoVO" resultType="userDbInfoVO">
+    <select id="selectAccessUserInfo" parameterType="loginUserInfoVO" resultType="dbManagerVO">
         <![CDATA[
             SELECT A.USER_ID, A.USER_NM, A.USER_IP_ADDR,
                    A.PW_FAIL_CNT, A.LOCK_FLG,

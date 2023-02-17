@@ -1,6 +1,6 @@
 package com.torange.api.login.service.impl;
 
-import com.torange.api.createPool.dao.vo.UserDbInfoVO;
+import com.torange.api.dbmanager.dao.vo.DbManagerVO;
 import com.torange.api.login.dao.LoginDAO;
 import com.torange.api.login.dao.vo.LoginUserInfoVO;
 import com.torange.api.login.service.LoginService;
@@ -21,7 +21,7 @@ public class LoginServiceImpl implements LoginService {
     private static final Logger log = LoggerFactory.getLogger(LoginServiceImpl.class);
 
     @Override
-    public List<UserDbInfoVO> loginProcess(LoginUserInfoVO userVo) throws Exception {
+    public List<DbManagerVO> loginProcess(LoginUserInfoVO userVo) throws Exception {
         return loginDAO.selectAccessUserInfo(userVo);
     }
 

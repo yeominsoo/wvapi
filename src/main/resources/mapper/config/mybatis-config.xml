@@ -13,7 +13,6 @@
 
     <typeAliases>
         <typeAlias type="com.torange.api.login.dao.vo.LoginUserInfoVO" alias="loginUserInfoVO" />
-        <typeAlias type="com.torange.api.createPool.dao.vo.UserDbInfoVO" alias="userDbInfoVO" />
         <typeAlias type="com.torange.api.dbmanager.dao.vo.DbManagerVO" alias="dbManagerVO" />
     </typeAliases>
 </configuration>

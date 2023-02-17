@@ -1,7 +1,7 @@
 package com.torange.api.login.controller;
 
 import com.torange.api.common.constant.Const;
-import com.torange.api.createPool.dao.vo.UserDbInfoVO;
+import com.torange.api.dbmanager.dao.vo.DbManagerVO;
 import com.torange.api.login.dao.vo.LoginUserInfoVO;
 import com.torange.api.login.service.LoginService;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public class LoginController {
         HashMap<String, Object> resultMap = new HashMap<>();
         HttpSession session = request.getSession();
 
-        List<UserDbInfoVO> result = loginService.loginProcess(userVo);
+        List<DbManagerVO> result = loginService.loginProcess(userVo);
 
         if(result == null || result.size() < 1){
             resultMap.put("result_code", HttpStatus.NO_CONTENT.value());
