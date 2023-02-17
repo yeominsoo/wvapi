@@ -1,0 +1,16 @@
+INSERT INTO public.user_info (user_id,user_nm,user_pw,pw_fail_cnt,lock_flg,user_ip_addr,pw_chg_flg,del_flg,etc03,etc04,etc05,etc06,etc07,etc08,reg_id,req_dtm,upd_id,upd_dtm) VALUES
+	 ('msyeo5','msyeo5','$2a$06$wg1ulumJGlRGL4sG07uFyOEk81baSZIC/ebbm6vuTmwCX8NfNS3YS',0,'N','0.0.0.0',1,0,NULL,NULL,NULL,NULL,NULL,NULL,'msyeo5','2023-02-08 14:09:59.712973','msyeo5','2023-02-08 14:09:59.712973'),
+	 ('msyeo11','msyeo11','$2a$06$e4/ZAa294nIIyy43EsHFkuYt73OR19jwy5L3jo1go3xUy6zoGHqby',0,'N','0.0.0.0',1,0,NULL,NULL,NULL,NULL,NULL,NULL,'msyeo11','2023-02-08 14:09:59.712973','msyeo11','2023-02-08 14:09:59.712973'),
+	 ('msyeo6','msyeo6','$2a$06$dw6GJW8HHFYnvSsk97J/VOhkPGQlEB.xBGQSg.5Vg/wcWOUmI2Dsm',0,'N','0.0.0.0',1,0,NULL,NULL,NULL,NULL,NULL,NULL,'msyeo6','2023-02-08 14:09:59.712973','msyeo6','2023-02-08 14:09:59.712973'),
+	 ('msyeo01','msyeo01','$2a$06$Ea/HKTxRr6x17i97wrWfvOBUqvLFz9bLBCr/xV/2MPW75QfsOIjYu',0,'N','0.0.0.0',1,0,NULL,NULL,NULL,NULL,NULL,NULL,'msyeo01','2023-02-08 14:09:59.712973','msyeo01','2023-02-08 14:09:59.712973'),
+	 ('msyeo9','msyeo9','$2a$06$CgV68o2wAFEHgU18D7HLlOBYMoisDo59XTFS5.D/XsCCuM5Mr8etq',0,'N','0.0.0.0',1,0,NULL,NULL,NULL,NULL,NULL,NULL,'msyeo9','2023-02-08 14:09:59.712973','msyeo9','2023-02-08 14:09:59.712973'),
+	 ('msyeo10','msyeo10','$2a$06$tTvlrSpvEvkRiBxS2nwJ7OmEB0iJeN6Zi4X.CCOe4dgCkmKLdO1AW',0,'N','0.0.0.0',1,0,NULL,NULL,NULL,NULL,NULL,NULL,'msyeo10','2023-02-08 14:09:59.712973','msyeo10','2023-02-08 14:09:59.712973'),
+	 ('msyeo7','msyeo7','$2a$06$IBEJMQl/P7BEkAsmdmPEY.kOfmtV2zfkBbHVy6BR59M8PfPNP3Ss.',0,'N','0.0.0.0',1,0,NULL,NULL,NULL,NULL,NULL,NULL,'msyeo7','2023-02-08 14:09:59.712973','msyeo7','2023-02-08 14:09:59.712973'),
+	 ('msyeo13','msyeo13','$2a$06$m5K2v7.CsghMpM/mgkIICO1beJheY4SkLFZCIL98whOcqhxGUq68q',0,'N','0.0.0.0',1,0,NULL,NULL,NULL,NULL,NULL,NULL,'msyeo13','2023-02-08 14:09:59.712973','msyeo13','2023-02-08 14:09:59.712973'),
+	 ('msyeo8','msyeo8','$2a$06$G5GzjOvMKf9JE0RtvtaA0O7EpQoYeV4TvhG2KbHuozjiCaP2c8l2a',0,'N','0.0.0.0',1,0,NULL,NULL,NULL,NULL,NULL,NULL,'msyeo8','2023-02-08 14:09:59.712973','msyeo8','2023-02-08 14:09:59.712973'),
+	 ('msyeo4','msyeo4','$2a$06$0iwSlOD8aMjYYQ/5TykCreSpBkvC3qgCu.nqVnP8jvq6coCzqk5sO',0,'N','0.0.0.0',1,0,NULL,NULL,NULL,NULL,NULL,NULL,'msyeo4','2023-02-08 14:09:59.712973','msyeo4','2023-02-08 14:09:59.712973');
+INSERT INTO public.user_info (user_id,user_nm,user_pw,pw_fail_cnt,lock_flg,user_ip_addr,pw_chg_flg,del_flg,etc03,etc04,etc05,etc06,etc07,etc08,reg_id,req_dtm,upd_id,upd_dtm) VALUES
+	 ('msyeo2','msyeo2','$2a$06$rW2RFEkdsL3SQ0Tqw4TiPeSUW.lmxa2prgASozJsCcDki79CbUF/W',0,'N','0.0.0.0',1,0,NULL,NULL,NULL,NULL,NULL,NULL,'msyeo2','2023-02-08 14:09:59.712973','msyeo2','2023-02-08 14:09:59.712973'),
+	 ('msyeo3','msyeo3','$2a$06$ti8CzfEzwpQZo0av..6Ta.GJgMdcmSP.PXm6kygToBI3.oeI74hWO',0,'N','0.0.0.0',1,0,NULL,NULL,NULL,NULL,NULL,NULL,'msyeo3','2023-02-08 14:09:59.712973','msyeo3','2023-02-08 14:09:59.712973'),
+	 ('msyeo12','msyeo12','$2a$06$wiS1mS0oPtaEn8XyGuZtD.B5wfJwBANX24iF0.7HaHtA43GsDGmzC',0,'N','0.0.0.0',1,0,NULL,NULL,NULL,NULL,NULL,NULL,'msyeo12','2023-02-08 14:09:59.712973','msyeo12','2023-02-08 14:09:59.712973'),
+	 ('msyeo','msyeo','$2a$06$FV34T3L9c8igRb69xMvxseB2K7FfufUK/h2g55Bt6PCd2fXFPmIcu',0,'N','0.0.0.0',1,0,NULL,NULL,NULL,NULL,NULL,NULL,'msyeo','2023-02-08 14:09:59.712973','msyeo','2023-02-08 14:09:59.712973');
