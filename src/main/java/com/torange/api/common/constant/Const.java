@@ -9,6 +9,7 @@ public class Const {
 
     /* Map Keys */
     public static final String USER_INFO = "userInfo";
+    public static final String USER_DB_INFO = "userDbInfo";
     public static final String POOL_NAME = "POOL_NAME";
 
 

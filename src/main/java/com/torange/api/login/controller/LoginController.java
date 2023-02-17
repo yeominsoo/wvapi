@@ -2,7 +2,9 @@ package com.torange.api.login.controller;
 
 import com.torange.api.common.constant.Const;
 import com.torange.api.dbmanager.dao.vo.DbManagerVO;
+import com.torange.api.dbmanager.service.DbManagerService;
 import com.torange.api.login.dao.vo.LoginUserInfoVO;
+import com.torange.api.login.dao.vo.UserDbInfoVO;
 import com.torange.api.login.service.LoginService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,9 @@ public class LoginController {
     @Resource(name = "loginService")
     private LoginService loginService;
 
+    @Resource(name = "dbManagerService")
+    private DbManagerService dbManagerService;
+
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
 
@@ -29,20 +34,28 @@ public class LoginController {
     @ResponseBody
     public HashMap<String, Object> loginProcess(HttpServletRequest request, @RequestBody LoginUserInfoVO userVo) throws Exception {
         HashMap<String, Object> resultMap = new HashMap<>();
+        HashMap<String, Object> initMap = new HashMap<>();
         HttpSession session = request.getSession();
 
-        List<DbManagerVO> result = loginService.loginProcess(userVo);
+        List<UserDbInfoVO> accessUserInfo = loginService.loginProcess(userVo);
+        List<DbManagerVO> dbConfigInfo = dbManagerService.selectDatabaseConfig(userVo);
 
-        if(result == null || result.size() < 1){
+        if (accessUserInfo.isEmpty()) {
             resultMap.put("result_code", HttpStatus.NO_CONTENT.value());
             resultMap.put("result_message", "no user");
             return resultMap;
         }
 
-        session.setAttribute(Const.USER_INFO, result);
+        if (!dbConfigInfo.isEmpty()) {
+            initMap.put("init_data", dbConfigInfo);
+        }
+
+        session.setAttribute(Const.USER_INFO, accessUserInfo);
         resultMap.put("result_code", HttpStatus.OK.value());
         resultMap.put("result_message", "");
-        resultMap.put(session.getId() + Const.SEPARATOR_AT + userVo.getUserId(), result);
+        resultMap.put("result_data", accessUserInfo);
+        resultMap.put("init_data", initMap);
+
         return resultMap;
     }
 }

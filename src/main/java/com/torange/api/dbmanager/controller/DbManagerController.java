@@ -4,7 +4,7 @@ import com.torange.api.common.constant.Const;
 import com.torange.api.common.database.MultiDbConnectionPool;
 import com.torange.api.common.validation.ConnectionAuthValidation;
 import com.torange.api.common.vo.ExcuteQueryVO;
-import com.torange.api.dbmanager.dao.vo.DbManagerVO;
+import com.torange.api.dbmanager.dao.vo.CreatePoolVO;
 import com.torange.api.dbmanager.service.DbManagerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,19 +29,20 @@ import java.util.HashMap;
         @PostMapping(value = "/createUserConnectionPool")
         @ResponseStatus(HttpStatus.OK)
         @ResponseBody
-        public HashMap<String, Object> createUserConnectionPool(HttpServletRequest request, @RequestBody DbManagerVO dsInfo) throws Exception {
+        public HashMap<String, Object> createUserConnectionPool(HttpServletRequest request, @RequestBody CreatePoolVO dsInfo) throws Exception {
 
             HashMap<String, Object> resultMap = new HashMap<>();
             HttpSession session = request.getSession();
+            String userId = (String) session.getAttribute("userId");
 
             boolean authFlg = ConnectionAuthValidation.validateConnectionAuth(session, dsInfo);
-            if (!authFlg) {
+            if (!authFlg  ) {
                 resultMap.put("resultCode", HttpStatus.FORBIDDEN);
                 resultMap.put("resultMessage", "Please check Authorization");
                 return resultMap;
             }
 
-            String dbPoolName = session.getId() + Const.SEPARATOR_AT + dsInfo.getUserId() + Const.SEPARATOR_AT + dsInfo.getDbType();
+            String dbPoolName = session.getId() + Const.SEPARATOR_AT + userId + Const.SEPARATOR_AT + dsInfo.getDbType();
 
             dsInfo.setDbPoolName(dbPoolName);
             MultiDbConnectionPool.createConnectionPool(dsInfo);

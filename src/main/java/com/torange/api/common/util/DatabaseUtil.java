@@ -1,7 +1,7 @@
 package com.torange.api.common.util;
 
 import com.torange.api.common.constant.Const;
-import com.torange.api.dbmanager.dao.vo.DbManagerVO;
+import com.torange.api.dbmanager.dao.vo.CreatePoolVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
@@ -20,7 +20,7 @@ public class DatabaseUtil {
 
     private final static Map<String, String> JDBC_DRIVER_MAP = new ConcurrentHashMap<>();
 
-    public static void invokeJdbcDriver(DbManagerVO dsInfo) throws Exception {
+    public static void invokeJdbcDriver(CreatePoolVO dsInfo) throws Exception {
         //if (!JDBC_DRIVER_MAP.containsKey(dsInfo.getDbType()) && !Const.POSTGRES_DB.equals(dsInfo.getDbType())) {
         if (!JDBC_DRIVER_MAP.containsKey(dsInfo.getJdbcPath())) {
             log.info("======== jdbc driver load process start ========");
@@ -38,7 +38,7 @@ public class DatabaseUtil {
         }
     }
 
-    public static void makeDatabaseUrl(DbManagerVO dsInfo) {
+    public static void makeDatabaseUrl(CreatePoolVO dsInfo) {
         String resultUrl = "";
         switch (dsInfo.getDbType()) {
             case Const.ORACLE_DB:
@@ -60,7 +60,7 @@ public class DatabaseUtil {
         dsInfo.setDbUrl(resultUrl);
     }
 
-    public static int getSqlType(String sql) throws Exception {
+    public static int getSqlType(String sql) {
         int sqlType = 5;
         sql = sql.trim();
 
