@@ -2,6 +2,7 @@ package com.torange.api.common.validation;
 
 import com.torange.api.common.constant.Const;
 import com.torange.api.dbmanager.dao.vo.CreatePoolVO;
+import com.torange.api.login.dao.vo.UserDbInfoVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ public class ConnectionAuthValidation {
 
     public static boolean validateConnectionAuth(HttpSession session, CreatePoolVO dbInfo) {
         try {
-            List<CreatePoolVO> dbInfoSession = (List<CreatePoolVO>) session.getAttribute(Const.USER_DB_INFO);
+            List<UserDbInfoVO> dbInfoSession = (List<UserDbInfoVO>) session.getAttribute(Const.USER_DB_INFO);
 
             if (dbInfoSession != null) {
                 // host:port 접근이 가능한지 여부만 체크.

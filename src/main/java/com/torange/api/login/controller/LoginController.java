@@ -50,7 +50,9 @@ public class LoginController {
             initMap.put("init_data", dbConfigInfo);
         }
 
-        session.setAttribute(Const.USER_INFO, accessUserInfo);
+        session.setAttribute(Const.USER_DB_INFO, accessUserInfo);
+        session.setAttribute("userId", userVo.getUserId());
+
         resultMap.put("result_code", HttpStatus.OK.value());
         resultMap.put("result_message", "");
         resultMap.put("result_data", accessUserInfo);
