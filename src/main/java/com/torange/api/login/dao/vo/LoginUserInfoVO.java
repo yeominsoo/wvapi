@@ -9,7 +9,7 @@ public @Data class LoginUserInfoVO {
     String userNm;
     String userIpAddr;
     String pwFailCnt;
-    String useFlg;
+    String delFlg;
     String lockFlg;
 
 }

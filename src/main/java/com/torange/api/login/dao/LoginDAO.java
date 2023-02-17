@@ -1,7 +1,7 @@
 package com.torange.api.login.dao;
 
-import com.torange.api.dbmanager.dao.vo.DbManagerVO;
 import com.torange.api.login.dao.vo.LoginUserInfoVO;
+import com.torange.api.login.dao.vo.UserDbInfoVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
@@ -11,6 +11,8 @@ import java.util.List;
 @Mapper
 @Repository
 public interface LoginDAO {
-    List<DbManagerVO> selectAccessUserInfo(LoginUserInfoVO userVo) throws SQLException;
+    List<UserDbInfoVO> selectAccessUserInfo(LoginUserInfoVO userVo) throws SQLException;
+
+
 }
 

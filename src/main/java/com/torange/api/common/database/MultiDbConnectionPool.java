@@ -3,7 +3,7 @@ package com.torange.api.common.database;
 import com.torange.api.common.constant.Const;
 import com.torange.api.common.util.DatabaseUtil;
 import com.torange.api.common.validation.ConnectionAuthValidation;
-import com.torange.api.dbmanager.dao.vo.DbManagerVO;
+import com.torange.api.dbmanager.dao.vo.CreatePoolVO;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
@@ -28,7 +28,7 @@ public class MultiDbConnectionPool {
         return datasource.getConnection();
     }
 
-    public static synchronized void createConnectionPool(DbManagerVO dsInfo) throws Exception {
+    public static synchronized void createConnectionPool(CreatePoolVO dsInfo) throws Exception {
         if (!DB_POOLMAP.containsKey(dsInfo.getDbPoolName())) createDataSource(dsInfo);
     }
 
@@ -40,39 +40,23 @@ public class MultiDbConnectionPool {
         }
     }
 
-    private static void createDataSource(DbManagerVO dsInfo) throws Exception {
-        // 파라미터 검사.
-        if (ConnectionAuthValidation.isVariableNull(dsInfo)) throw new Exception(ConnectionAuthValidation.getMessage(dsInfo));
-
-        //url setting
-        DatabaseUtil.makeDatabaseUrl(dsInfo);
-        // jdbc driver load
-        DatabaseUtil.invokeJdbcDriver(dsInfo);
-        // configuration connection
-        HikariConfig hikariConfig = getHikariConfig(dsInfo);
-        // create hikaricp
-        HikariDataSource hikariDataSource = new HikariDataSource(hikariConfig);
-
-        DB_POOLMAP.put(dsInfo.getDbPoolName(), hikariDataSource);
-    }
-
-    private static HikariConfig getHikariConfig(DbManagerVO dsInfo) {
+    private static HikariConfig getHikariConfig(CreatePoolVO poolVO) {
         HikariConfig hikaConfig = new HikariConfig();
 
         try {
             // This is same as passing the Connection info to the DriverManager class.
             // your jdbc url. in my case it is mysql.
-            hikaConfig.setJdbcUrl(dsInfo.getDbUrl());
+            hikaConfig.setJdbcUrl(poolVO.getDbUrl());
             // username
-            hikaConfig.setUsername(dsInfo.getDbUser());
+            hikaConfig.setUsername(poolVO.getDbUser());
             // password
-            hikaConfig.setPassword(dsInfo.getDbPw());
+            hikaConfig.setPassword(poolVO.getDbPw());
             // driver class name
-            hikaConfig.setDriverClassName(dsInfo.getDbDriverClNm());
+            hikaConfig.setDriverClassName(poolVO.getDbDriverClNm());
 
             // Information about the pool
             // pool name. This is optional you don't have to do it.
-            hikaConfig.setPoolName(dsInfo.getDbPoolName());
+            hikaConfig.setPoolName(poolVO.getDbPoolName());
 
             // the maximum connection which can be created by or resides in the pool
             hikaConfig.setMaximumPoolSize(Const.INT_CONNECTION_POOL_SIZE);
@@ -91,6 +75,22 @@ public class MultiDbConnectionPool {
         }
 
         return hikaConfig;
+    }
+
+    private static void createDataSource(CreatePoolVO dsInfo) throws Exception {
+        // 파라미터 검사.
+        if (ConnectionAuthValidation.isVariableNull(dsInfo)) throw new Exception(ConnectionAuthValidation.getMessage(dsInfo));
+
+        //url setting
+        DatabaseUtil.makeDatabaseUrl(dsInfo);
+        // jdbc driver load
+        DatabaseUtil.invokeJdbcDriver(dsInfo);
+        // configuration connection
+        HikariConfig hikariConfig = getHikariConfig(dsInfo);
+        // create hikaricp
+        HikariDataSource hikariDataSource = new HikariDataSource(hikariConfig);
+
+        DB_POOLMAP.put(dsInfo.getDbPoolName(), hikariDataSource);
     }
 
     public static Boolean isAliveConnectionPool(String dbPoolName) {

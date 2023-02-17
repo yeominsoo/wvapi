@@ -2,7 +2,9 @@ package com.torange.api.dbmanager.service.impl;
 
 import com.torange.api.common.util.DatabaseUtil;
 import com.torange.api.dbmanager.dao.DbManagerDAO;
+import com.torange.api.dbmanager.dao.vo.DbManagerVO;
 import com.torange.api.dbmanager.service.DbManagerService;
+import com.torange.api.login.dao.vo.LoginUserInfoVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,5 +96,11 @@ public class DbManagerServiceImpl implements DbManagerService {
         }
 
         return resultMap;
+    }
+
+
+    @Override
+    public List<DbManagerVO> selectDatabaseConfig(LoginUserInfoVO userVo) throws Exception {
+        return dbManagerDAO.selectDatabaseConfig(userVo);
     }
 }
