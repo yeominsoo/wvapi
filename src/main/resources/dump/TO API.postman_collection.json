@@ -1,0 +1,362 @@
+{
+	"info": {
+		"_postman_id": "fd8f1436-2531-43f2-b048-ef4d6716f77f",
+		"name": "TO API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"msyeo\",\r\n    \"userPw\": \"P@ssw0rd!\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/warevalley/torange/api/loginProcess",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"warevalley",
+						"torange",
+						"api",
+						"loginProcess"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[MariaDB] createUserConnectionPool",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": \"msyeo\",\r\n    \"dbType\": \"mariadb\",\r\n    \"dbHost\": \"10.10.5.213\",\r\n    \"dbPort\": \"3306\",\r\n    \"dbServiceName\": null,\r\n    \"dbSid\": null,\r\n    \"dbName\": \"dolsup-db\",\r\n    \"dbListenType\": 0,\r\n    \"dbUser\": \"dolsup\",\r\n    \"dbPw\": \"Choi7546!@\",\r\n    \"dbDriverClNm\": \"org.mariadb.jdbc.Driver\",\r\n    \"jdbcPath\": \"/jdbc/maria/mariadb-java-client-2.7.5.jar\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/warevalley/torange/api/createUserConnectionPool",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"warevalley",
+						"torange",
+						"api",
+						"createUserConnectionPool"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[MariaDB] selectConnectionTest",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dbPoolName\": \"msyeo@@mariadb\",\r\n    \"sql\": \"select * from sample_table;\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/warevalley/torange/api/excuteQueryTest",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"warevalley",
+						"torange",
+						"api",
+						"excuteQueryTest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[MariaDB] releaseConnection",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dbPoolName\": \"msyeo@@mariadb\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/warevalley/torange/api/poolShutdown",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"warevalley",
+						"torange",
+						"api",
+						"poolShutdown"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Postgresql] createUserConnectionPool",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "        {\r\n            \"userId\": \"msyeo\",\r\n            \"dbType\": \"postgres\",\r\n            \"dbHost\": \"localhost\",\r\n            \"dbPort\": \"5432\",\r\n            \"dbServiceName\": \"msyeo\",\r\n            \"dbListenType\": 0,\r\n            \"dbUser\": \"msyeo\",\r\n            \"dbPw\": \"msyeo\",\r\n            \"dbDriverClNm\": \"org.postgresql.Driver\",\r\n            \"jdbcPath\": \"/jdbc/postgres/postgresql-42.5.1.jar\"\r\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/warevalley/torange/api/createUserConnectionPool",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"warevalley",
+						"torange",
+						"api",
+						"createUserConnectionPool"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[PostgreSQL] selectConnectionTest",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dbPoolName\": \"msyeo@@postgres\",\r\n    \"sql\": \"update user_db_info set db_listen_type = 0 where user_id = 'msyeo' and db_type = 'oracle' and sort_no = 5;\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/warevalley/torange/api/excuteQueryTest",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"warevalley",
+						"torange",
+						"api",
+						"excuteQueryTest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[PostgreSQL] releaseConnection",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dbPoolName\": \"msyeo@@postgres\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/warevalley/torange/api/poolShutdown",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"warevalley",
+						"torange",
+						"api",
+						"poolShutdown"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Oracle] createUserConnectionPool",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "        {\r\n            \"userId\": \"msyeo\",\r\n            \"dbType\": \"oracle\",\r\n            \"dbHost\": \"localhost\",\r\n            \"dbPort\": \"1521\",\r\n            \"dbServiceName\": \"ORCL\",\r\n            \"dbListenType\": 1,\r\n            \"dbUser\": \"msyeo\",\r\n            \"dbPw\": \"msyeo\",\r\n            \"dbDriverClNm\": \"oracle.jdbc.OracleDriver\",\r\n            \"jdbcPath\": \"/jdbc/oracle/ojdbc6-11.2.0.3.jar\"\r\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/warevalley/torange/api/createUserConnectionPool",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"warevalley",
+						"torange",
+						"api",
+						"createUserConnectionPool"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Oracle] createUserConnectionPool Copy",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "        {\r\n            \"userId\": \"msyeo2\",\r\n            \"dbType\": \"oracle\",\r\n            \"dbHost\": \"localhost\",\r\n            \"dbPort\": \"1521\",\r\n            \"dbServiceName\": \"ORCL\",\r\n            \"dbListenType\": 1,\r\n            \"dbUser\": \"msyeo\",\r\n            \"dbPw\": \"msyeo\",\r\n            \"dbDriverClNm\": \"oracle.jdbc.OracleDriver\",\r\n            \"jdbcPath\": \"/jdbc/oracle/ojdbc8-19.3.0.0.jar\"\r\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/warevalley/torange/api/createUserConnectionPool",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"warevalley",
+						"torange",
+						"api",
+						"createUserConnectionPool"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Oracle] selectConnectionTest",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dbPoolName\": \"msyeo@@oracle\",\r\n    \"sql\": \"INSERT INTO SAMPLE_TABLE_2 select max(user_seq)+1 as user_id, 'msyeo2', '민수2' from sample_table_2 where user_id = 'msyeo'\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/warevalley/torange/api/excuteQueryTest",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"warevalley",
+						"torange",
+						"api",
+						"excuteQueryTest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[Oracle] releaseConnection",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"dbPoolName\": \"msyeo@@oracle\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/warevalley/torange/api/poolShutdown",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"warevalley",
+						"torange",
+						"api",
+						"poolShutdown"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
